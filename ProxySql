@@ -27,7 +27,7 @@ gpgkey=https://repo.proxysql.com/ProxySQL/repo_pub_key
 << mysql -u admin -p -h 127.0.0.1 -P6032 --prompt='Admin>' --default-auth=mysql_native_password
 
 #now change the admin passowrd
-<< UPDATE global_variables SET variable_value='admin:Centos#321@' WHERE variable_name='admin-admin_credentials';
+<< UPDATE global_variables SET variable_value='admin:test#321@' WHERE variable_name='admin-admin_credentials';
 << LOAD MYSQL VARIABLES TO RUNTIME;
 << LOAD MYSQL SERVERS TO RUNTIME;
 
@@ -41,13 +41,13 @@ gpgkey=https://repo.proxysql.com/ProxySQL/repo_pub_key
 << SELECT * FROM mysql_servers;
 
 ## Now login to mysql-cluster nodes and add user for moniotring 
-<< CREATE USER 'monitor'@'%' IDENTIFIED BY 'Centos#321@';
+<< CREATE USER 'monitor'@'%' IDENTIFIED BY 'test#321@';
 << GRANT SELECT ON *.* TO  'monitor'@'%';
 << FLUSH PRIVILEGES;
 
 ## Now login to porxysql-nodes and add the monitor user with same credential as of master-cluster 
 << UPDATE global_variables SET variable_value='monitor' WHERE variable_name='mysql-monitor_username';
-<< UPDATE global_variables SET variable_value='Centos#321@' WHERE variable_name='mysql-monitor_password';
+<< UPDATE global_variables SET variable_value='test#321@' WHERE variable_name='mysql-monitor_password';
 << UPDATE global_variables SET variable_value='2000' WHERE variable_name IN ('mysql-monitor_connect_interval','mysql-monitor_ping_interval','mysql-monitor_read_only_interval');
 << LOAD MYSQL VARIABLES TO RUNTIME;
 << LOAD MYSQL SERVERS TO RUNTIME;
@@ -59,12 +59,12 @@ gpgkey=https://repo.proxysql.com/ProxySQL/repo_pub_key
 
 ###now login to mysql-cluster nodes and add-user for data-base connection with application.
 << mysql -u root -p
-<< CREATE USER 'testuser'@'%' IDENTIFIED BY 'Centos#321@';
+<< CREATE USER 'testuser'@'%' IDENTIFIED BY 'test#321@';
 << GRANT ALL ON *.* TO 'testuser'@'%';
 << FLUSH PRIVILEGES;
 
 ## Now login to porxysql-nodes and add the add the same user with same credential as of master-cluster for data-base connection with application.
-<< INSERT INTO mysql_users(username,password,default_hostgroup) VALUES ('testuser','Centos#321@',1);
+<< INSERT INTO mysql_users(username,password,default_hostgroup) VALUES ('testuser','test#321@',1);
 << LOAD MYSQL USERS TO RUNTIME;
 << SAVE MYSQL USERS TO DISK;
 
@@ -76,9 +76,8 @@ gpgkey=https://repo.proxysql.com/ProxySQL/repo_pub_key
 
 ### now use the testuser credential for application connection 
 mysql-user-name= testuser
-mysql-password= Centos#321@
+mysql-password= test#321@
 mysql-port= 6033 
 
 
-reference: https://www.centlinux.com/2019/09/install-proxysql-load-balancer-mysql-centos-7.html#:~:text=ProxySQL%20v2.&text=Copy%20the%20URL%20of%20your,x86_64.
 
